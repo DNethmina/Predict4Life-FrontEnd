@@ -1,0 +1,121 @@
+/* src/pages/signup/signup.css */
+
+.signup-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #fef2f2; /* Light background similar to your login */
+  font-family: Arial, sans-serif;
+  padding: 20px; /* Add some padding for smaller screens */
+  box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+.signup-card {
+  background: white;
+  padding: 40px; /* Increased padding to match the login card's spacious feel */
+  border-radius: 12px; /* More rounded corners */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Deeper shadow */
+  width: 100%;
+  max-width: 450px; /* Slightly wider card for better form layout */
+  text-align: center; /* Center text elements like the logo */
+}
+
+.signup-logo {
+  margin-bottom: 25px; /* Space below logo */
+}
+
+.signup-logo h1 {
+  font-size: 2.5em; /* Larger font for "Welcome" */
+  color: #333; /* Darker text */
+  margin-bottom: 5px; /* Space between Welcome and Predict4Life */
+}
+
+.signup-logo .predict-text {
+  font-size: 2.5em; /* Larger font for "Predict4Life" */
+  color: #eb4d4b; /* Your distinct red color */
+  font-weight: bold;
+}
+
+.signup-form {
+  margin-top: 30px; /* Space between logo and form */
+  text-align: left; /* Align form labels and inputs to the left */
+}
+
+.form-group {
+  margin-bottom: 20px; /* Space between form groups */
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+  font-size: 0.95em;
+}
+
+input {
+  width: 100%;
+  padding: 12px 15px; /* More padding for inputs */
+  border: 1px solid #ddd; /* Lighter border */
+  border-radius: 6px; /* Slightly more rounded input corners */
+  box-sizing: border-box;
+  font-size: 1em;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #eb4d4b; /* Focus color matches your red theme */
+  box-shadow: 0 0 0 3px rgba(235, 77, 75, 0.2); /* Subtle glow on focus */
+}
+
+/* --- Validation Highlight Style --- */
+input.is-invalid {
+  border-color: #dc3545; /* Red border for errors */
+  background-color: #fffafa; /* Light red background for invalid fields */
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.85em; /* Slightly smaller error message font */
+  margin-top: 5px;
+  text-align: left;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px; /* More padding for a larger, more clickable button */
+  border: none;
+  border-radius: 6px; /* Rounded button corners */
+  background-color: #eb4d4b; /* Your red theme color */
+  color: white;
+  font-size: 1.1em; /* Larger font for button text */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 25px; /* Space above the button */
+}
+
+.submit-btn:hover {
+  background-color: #c0392b; /* Slightly darker red on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.bottom-text {
+  text-align: center;
+  margin-top: 25px; /* Space above bottom text */
+  font-size: 0.95em;
+  color: #666;
+}
+
+.bottom-text a {
+  color: #eb4d4b; /* Link color matches your red theme */
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.bottom-text a:hover {
+  text-decoration: underline;
+}
