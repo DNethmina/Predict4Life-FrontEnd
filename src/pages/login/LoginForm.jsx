@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+// Corrected import paths based on the file structure
 import "./login.css";
 import { loginUser } from "../../services/api";
+import logo from "../../assets/images/logo-black.png";
 
-const Login = () => {
+// Renamed component to match the filename "LoginForm.jsx"
+const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -54,12 +58,9 @@ const Login = () => {
         <div className="login-page-container">
             <div className="login-form-wrapper">
                 <div className="login-form-section">
-                    {/* --- CORRECTED SECTION --- */}
+
                     <div className="welcome-text">
-                        <h1>Welcome</h1>
-                        <h1 className="highlight">
-                            Predict<span>4</span>Life
-                        </h1>
+                        <img src={logo} alt="Predict4Life Logo" className="login-logo" />
                     </div>
 
                     <form onSubmit={handleLogin}>
@@ -112,4 +113,5 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginForm;
+

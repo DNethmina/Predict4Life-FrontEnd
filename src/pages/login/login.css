@@ -26,31 +26,17 @@
     padding: 40px;
 }
 
-/* --- UPDATED: Welcome Header Styles --- */
+/* --- UPDATED: Logo Styles --- */
 .welcome-text {
     text-align: center;
-    margin-bottom: 35px; /* Added a bit more space below */
-    line-height: 1.1;    /* Adjusted line height for bigger text */
+    margin-bottom: 35px;
 }
 
-.welcome-text h1 {
-    margin: 0;
-    font-weight: 800; /* Made all header text extra-bold */
-}
-
-.welcome-text h1:first-child {
-    font-size: 3rem;  /* Increased size of "Welcome" */
-    color: #111827;
-}
-
-.welcome-text h1.highlight {
-    font-size: 3.5rem; /* Increased size of "Predict4Life" */
-    color: #c51a1a;
-}
-
-.welcome-text span {
-    color: #111827;
-    margin: 0 2px;
+.login-logo {
+    width: 100%;
+    max-width: 250px; /* Controls the maximum size of the logo */
+    height: auto;
+    margin: 0 auto 15px; /* Centers the logo and adds some space below */
 }
 /* --- End of Updated Styles --- */
 

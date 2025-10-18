@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './signup.css'; // Import the stylesheet
+import logo from "../../assets/images/logo-black.png";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -72,10 +73,9 @@ const Signup = () => {
   return (
     <div className="signup-page-container"> {/* Use the new container class */}
       <div className="signup-card"> {/* Use the new card class */}
-        <div className="signup-logo"> {/* Branding section */}
-          <h1>Welcome</h1>
-          <h1 className="predict-text">Predict4Life</h1>
-        </div>
+        <div className="welcome-text">
+                                <img src={logo} alt="Predict4Life Logo" className="login-logo" />
+                            </div>
 
         <form onSubmit={handleSubmit} className="signup-form"> {/* Use the new form class */}
           {/* Name Field */}

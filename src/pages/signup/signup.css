@@ -9,6 +9,7 @@
   font-family: Arial, sans-serif;
   padding: 20px; /* Add some padding for smaller screens */
   box-sizing: border-box; /* Include padding in element's total width and height */
+  width: 100vw;
 }
 
 .signup-card {

@@ -5,7 +5,7 @@ import Home from './routes/Home';
 import Donate from './routes/Donate';
 import Contact from './routes/Contact';
 import About from './routes/About';
-import Login from './pages/login/LoginForm.jsx';
+import LoginForm from './pages/login/LoginForm.jsx';
 import Signup from './pages/signup/signup';
 
 const App = () => {
@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/donate" element={<Donate />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
     </div>
