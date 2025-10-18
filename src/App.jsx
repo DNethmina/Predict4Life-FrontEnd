@@ -5,8 +5,8 @@ import Home from './routes/Home';
 import Donate from './routes/Donate';
 import Contact from './routes/Contact';
 import About from './routes/About';
-import Login from './pages/login/Login.jsx'
-import Signup from './pages/signup/signup.jsx';
+import Login from './pages/login/LoginForm.jsx';
+import Signup from './pages/signup/signup';
 
 const App = () => {
   const current_theme = localStorage.getItem('current_theme');

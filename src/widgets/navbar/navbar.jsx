@@ -26,7 +26,9 @@ const Navbar = ({theme, setTheme}) => {
       </ul>
 
       <div className="nav-right">
-        <button className="login-button">Login</button>
+        <Link to="/login">
+          <button className="login-button">Login</button>
+        </Link>
         <img 
           onClick={toggle_mode} 
           src={theme === 'light' ? toggle_light : toggle_dark} 
