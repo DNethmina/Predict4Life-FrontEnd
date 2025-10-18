@@ -4,3 +4,45 @@
   box-sizing: border-box;
   font-family: sans-serif;
 }
+
+.container{
+  width: 100vw;
+  min-height: 100vh;
+  /* background: #fef2f2; */
+  transition: 0.5s;
+}
+
+.container.dark{
+  background: #222;
+  color: #fff;
+}
+
+/* Add padding for the fixed navbar */
+
+/* Home page styles */
+.home-page {
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.home-page h1 {
+  color: #dc2626;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.home-page p {
+  color: #4b5563;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.dark .home-page p {
+  color: #e5e7eb;
+}
+
+/* Add padding for the fixed navbar */
+.container > *:not(.navbar) {
+  padding-top: calc(80px + 1rem); /* navbar height + some extra space */
+  padding-inline: 7%; /* match navbar's horizontal padding */
+}
