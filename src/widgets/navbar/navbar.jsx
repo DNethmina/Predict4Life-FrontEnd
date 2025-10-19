@@ -5,6 +5,7 @@ import logo_dark from '../../assets/images/logo-white.png'
 import toggle_light from '../../assets/images/night.png'
 import toggle_dark from '../../assets/images/day.png'
 import { Link, NavLink } from 'react-router-dom'
+import Contact from '../contact/contact'
 
 const Navbar = ({theme, setTheme}) => {
 
@@ -21,7 +22,7 @@ const Navbar = ({theme, setTheme}) => {
       <ul className='nav-list'>
         <li><NavLink to="/" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Home</NavLink></li>
         <li><NavLink to="/donate" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Donate</NavLink></li>
-        <li><NavLink to="/contact" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Contact Us</NavLink></li>
+        <li><NavLink to="/Contact" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Contact Us</NavLink></li>
         <li><NavLink to="/about" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>About Us</NavLink></li>
       </ul>
 

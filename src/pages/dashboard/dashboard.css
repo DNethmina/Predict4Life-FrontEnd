@@ -1,0 +1,151 @@
+/* --- General Dashboard Styles --- */
+.dashboard-container { 
+    background-color: var(--bg-secondary); 
+    min-height: 100vh;
+    padding: 1.5rem;
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    color: var(--text-primary);
+}
+.dashboard-header { margin-bottom: 2rem; }
+.dashboard-header p { font-size: 1rem; color: var(--text-secondary); }
+.dashboard-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.5rem; }
+@media (min-width: 1024px) { .dashboard-grid { grid-template-columns: repeat(2, 1fr); } }
+.dashboard-card { 
+    background-color: var(--card-bg); 
+    border-radius: 12px; 
+    padding: 1.5rem; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); 
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+.dashboard-card:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.1); }
+.dashboard-card h3 { 
+    font-size: 1.25rem; 
+    font-weight: 600; 
+    color: var(--text-primary); 
+    margin-bottom: 1.5rem; 
+    border-bottom: 1px solid var(--border-color); 
+    padding-bottom: 0.75rem; 
+}
+
+/* --- Chart Card --- */
+.chart-card { grid-column: span 1; }
+@media (min-width: 1024px) { .chart-card { grid-column: span 2; } }
+.chart-and-stats { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+@media (min-width: 768px) { .chart-and-stats { flex-direction: row; } }
+.pie-chart-container { width: 100%; min-height: 250px; flex: 1; }
+.stats-container { display: flex; flex-direction: column; gap: 1.5rem; width: 100%; flex: 1; }
+.stat-item { background-color: var(--bg-secondary); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border-color); }
+.stat-item h4 { font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
+.stat-item p { font-size: 1.75rem; font-weight: 700; color: var(--primary-red); }
+
+/* --- Events Card --- */
+.events-card { grid-column: span 1; }
+.events-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+.event-item { border: 1px solid var(--border-color); padding: 1rem; border-radius: 8px; background-color: var(--bg-secondary); }
+.event-item h4 { font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
+.event-item .event-detail { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
+.event-button { background-color: var(--primary-red); color: white; border: none; border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s; }
+.event-button:hover { background-color: var(--primary-red-dark); }
+
+/* --- Table Card --- */
+.table-card { grid-column: span 1; }
+@media (min-width: 1024px) { .table-card { grid-column: span 2; } }
+.table-wrapper { overflow-x: auto; }
+.donors-table { width: 100%; border-collapse: collapse; text-align: left; }
+.donors-table th, .donors-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color); }
+.donors-table th { font-size: 0.875rem; color: var(--primary-red); font-weight: 500; text-transform: uppercase; }
+.donors-table td { font-size: 0.875rem; color: var(--text-primary); }
+.donors-table tbody tr:last-child td { border-bottom: none; }
+
+/* ============================================== */
+/* === FINAL BLOOD LEVEL INDICATOR STYLES === */
+/* ============================================== */
+.blood-group-card { grid-column: span 1; }
+
+.blood-drops-container { 
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1.5rem;
+    padding-top: 1rem;
+    place-items: center;
+}
+
+.blood-drop-wrapper { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+    height: 150px;
+}
+
+.blood-drop {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background-color: var(--bg-secondary);
+    border: 3px solid var(--primary-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.blood-drop::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--fill-percentage);
+    background-color: var(--primary-red);
+    z-index: 1;
+    transition: height 0.8s ease-out;
+}
+
+.blood-drop-content {
+    font-size: 22px;
+    font-weight: 700;
+    color: black; /* This ensures text is always visible and black */
+    z-index: 2; /* Keeps text on top of the fill */
+}
+
+.blood-drop-label { 
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 12px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+/* --- Responsive styles for smaller screens --- */
+@media (max-width: 768px) {
+    .blood-drops-container {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+    
+    .blood-drop-wrapper {
+        width: 70px;
+        height: 120px;
+    }
+    
+    .blood-drop {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .blood-drop-content {
+        font-size: 14px;
+    }
+    
+    .blood-drop-label {
+        font-size: 14px;
+        margin-top: 8px;
+    }
+}

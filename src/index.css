@@ -1,0 +1,116 @@
+:root {
+  /* Layout dimensions */
+  --sidebar-width: 260px;
+  --sidebar-width-collapsed: 80px;
+  --navbar-height: 64px;
+  
+  /* Colors */
+  --primary-red: #d90429;
+  --primary-red-light: #fbe9ec;
+  --background-light: #f5f5f5;
+  --card-background-light: #ffffff;
+  --text-primary-light: #2d3748;
+  --text-secondary-light: #718096;
+  --border-color-light: #e2e8f0;
+  
+  /* Dark mode colors */
+  --background-dark: #1a202c;
+  --card-background-dark: #2d3748;
+  --text-primary-dark: #f7fafc;
+  --text-secondary-dark: #a0aec0;
+  --border-color-dark: #4a5568;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--background-light);
+  transition: background-color 0.3s ease;
+}
+
+.app-wrapper.dark {
+  background-color: var(--background-dark);
+}
+
+.content-wrapper {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  transition: all 0.3s ease-in-out;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* When sidebar is collapsed */
+.sidebar.collapsed + .content-wrapper {
+  margin-left: var(--sidebar-width-collapsed);
+}
+
+.page-content {
+  flex: 1;
+  padding: 24px;
+  margin-top: var(--navbar-height);
+  transition: all 0.3s ease;
+}
+
+/* Theme Variants */
+.app-wrapper.light {
+  --bg-primary: var(--background-light);
+  --bg-secondary: var(--card-background-light);
+  --text-primary: var(--text-primary-light);
+  --text-secondary: var(--text-secondary-light);
+  --border-color: var(--border-color-light);
+}
+
+.app-wrapper.dark {
+  --bg-primary: var(--background-dark);
+  --bg-secondary: var(--card-background-dark);
+  --text-primary: var(--text-primary-dark);
+  --text-secondary: var(--text-secondary-dark);
+  --border-color: var(--border-color-dark);
+}
+
+/* Theme styles */
+.app-wrapper.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #2b2d42;
+  --text-secondary: #6c757d;
+  --border-color: #e5e7eb;
+  --navbar-bg: #ffffff;
+  --sidebar-bg: #ffffff;
+  --card-bg: #ffffff;
+}
+
+.app-wrapper.dark {
+  --bg-primary: #1a1c23;
+  --bg-secondary: #121317;
+  --text-primary: #ffffff;
+  --text-secondary: #d1d1d1;
+  --border-color: #2d3748;
+  --navbar-bg: #1a1c23;
+  --sidebar-bg: #1a1c23;
+  --card-bg: #1a1c23;
+}
+
+.app-wrapper.dark .content-wrapper {
+  background-color: var(--bg-secondary);
+}
+
+.app-wrapper.dark .sidebar {
+  background-color: var(--sidebar-bg);
+  border-color: var(--border-color);
+}
+
+.app-wrapper.dark .navbar {
+  background-color: var(--navbar-bg);
+  border-color: var(--border-color);
+}

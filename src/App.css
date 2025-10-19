@@ -1,0 +1,24 @@
+/* src/App.css */
+
+/* These variables should match the ones in your sidebar.css */
+:root {
+  --sidebar-width: 260px;
+  --sidebar-width-collapsed: 80px;
+}
+
+.content-wrapper {
+  /* Push content to the right by the sidebar's width */
+  margin-left: var(--sidebar-width);
+  
+  /* Smooth transition to match the sidebar's animation */
+  transition: margin-left 0.3s ease;
+  
+  /* Ensure it takes up the remaining width */
+  width: calc(100% - var(--sidebar-width));
+}
+
+/* When collapsed, reduce the margin-left */
+.content-wrapper.collapsed {
+  margin-left: var(--sidebar-width-collapsed);
+  width: calc(100% - var(--sidebar-width-collapsed));
+}
