@@ -9,7 +9,12 @@ import Home from './routes/Home.jsx';
 import './App.css';
 import Contact from './widgets/contact/contact.jsx';
 import About from './routes/About.jsx';
+import DonorGuide from './routes/DonorGuide.jsx';
 import Donor from './widgets/Donar/Donar.jsx';
+import PredictionForm from './widgets/Forms/PredictionForm.jsx';
+import BloodUsageForm from './widgets/Forms/BloodUsageForm.jsx';
+import BloodWastageForm from './widgets/Forms/BloodWastageForm.jsx';
+import BloodCampForm from './widgets/Forms/BloodCampForm.jsx';
 
 const App = () => {
   const current_theme = localStorage.getItem('current_theme');
@@ -145,6 +150,100 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+
+      {/* Forms Routes (Protected) */}
+      <Route
+        path="/blood-prediction"
+        element={
+          <ProtectedRoute>
+            <div className={`app-wrapper ${theme} dashboard`}>
+              <Sidebar 
+                theme={theme}
+                setTheme={setTheme}
+                isCollapsed={isSidebarCollapsed} 
+                toggleSidebar={toggleSidebar} 
+              />
+              <div className={`content-wrapper ${isSidebarCollapsed ? 'collapsed' : ''}`}>
+                <div className="page-content">
+                  <PredictionForm theme={theme} />
+                </div>
+              </div>
+            </div>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/blood-usage"
+        element={
+          <ProtectedRoute>
+            <div className={`app-wrapper ${theme} dashboard`}>
+              <Sidebar 
+                theme={theme}
+                setTheme={setTheme}
+                isCollapsed={isSidebarCollapsed} 
+                toggleSidebar={toggleSidebar} 
+              />
+              <div className={`content-wrapper ${isSidebarCollapsed ? 'collapsed' : ''}`}>
+                <div className="page-content">
+                  <BloodUsageForm theme={theme} />
+                </div>
+              </div>
+            </div>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/blood-wastage"
+        element={
+          <ProtectedRoute>
+            <div className={`app-wrapper ${theme} dashboard`}>
+              <Sidebar 
+                theme={theme}
+                setTheme={setTheme}
+                isCollapsed={isSidebarCollapsed} 
+                toggleSidebar={toggleSidebar} 
+              />
+              <div className={`content-wrapper ${isSidebarCollapsed ? 'collapsed' : ''}`}>
+                <div className="page-content">
+                  <BloodWastageForm theme={theme} />
+                </div>
+              </div>
+            </div>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/blood-camp"
+        element={
+          <ProtectedRoute>
+            <div className={`app-wrapper ${theme} dashboard`}>
+              <Sidebar 
+                theme={theme}
+                setTheme={setTheme}
+                isCollapsed={isSidebarCollapsed} 
+                toggleSidebar={toggleSidebar} 
+              />
+              <div className={`content-wrapper ${isSidebarCollapsed ? 'collapsed' : ''}`}>
+                <div className="page-content">
+                  <BloodCampForm theme={theme} />
+                </div>
+              </div>
+            </div>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Donor Guide Route (Public) */}
+      <Route path="/donor-guide" element={
+        <PublicLayout>
+          <div className="page-content">
+            <DonorGuide theme={theme} />
+          </div>
+        </PublicLayout>
+      } />
 
       {/* Catch all route */}
       <Route path="*" element={<Navigate to="/" replace />} />

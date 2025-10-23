@@ -9,7 +9,12 @@ import {
   FaSignOutAlt,
   FaSun,
   FaMoon,
-  FaHome
+  FaHome,
+  FaChartLine,
+  FaHospital,
+  FaTrash,
+  FaCampground,
+  FaClipboardList
 } from 'react-icons/fa';
 
 const Sidebar = ({ isCollapsed, toggleSidebar, theme, setTheme }) => {
@@ -63,6 +68,43 @@ const Sidebar = ({ isCollapsed, toggleSidebar, theme, setTheme }) => {
           <button onClick={() => navigate('/events')}>
             <FaCalendarAlt className="menu-icon" />
             <span className="menu-text">Events</span>
+          </button>
+        </li>
+
+        {/* Forms Section */}
+        <li className="section-title">
+          <span className="menu-text">Forms</span>
+        </li>
+
+        {/* Blood Prediction Form */}
+        <li className="item">
+          <button onClick={() => navigate('/blood-prediction')}>
+            <FaChartLine className="menu-icon" />
+            <span className="menu-text">Blood Prediction</span>
+          </button>
+        </li>
+
+        {/* Blood Usage Form */}
+        <li className="item">
+          <button onClick={() => navigate('/blood-usage')}>
+            <FaHospital className="menu-icon" />
+            <span className="menu-text">Blood Usage</span>
+          </button>
+        </li>
+
+        {/* Blood Wastage Form */}
+        <li className="item">
+          <button onClick={() => navigate('/blood-wastage')}>
+            <FaTrash className="menu-icon" />
+            <span className="menu-text">Blood Wastage</span>
+          </button>
+        </li>
+
+        {/* Blood Camp Form */}
+        <li className="item">
+          <button onClick={() => navigate('/blood-camp')}>
+            <FaCampground className="menu-icon" />
+            <span className="menu-text">Blood Camp</span>
           </button>
         </li>
 

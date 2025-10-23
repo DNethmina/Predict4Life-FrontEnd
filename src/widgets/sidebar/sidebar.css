@@ -77,6 +77,20 @@
   flex-grow: 1;
 }
 
+.section-title {
+  padding: 20px 15px 10px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+.sidebar.collapsed .section-title {
+  display: none;
+}
+
 .item button {
   display: flex;
   align-items: center;

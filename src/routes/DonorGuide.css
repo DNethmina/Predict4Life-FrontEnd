@@ -1,0 +1,195 @@
+.guide-page-wrapper {
+  padding: 100px 30px 40px; /* 100px top padding to clear the navbar */
+  background-color: var(--bg-secondary);
+}
+
+.guide-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px; /* Use dashboard-card styles you have */
+}
+
+.guide-header {
+  text-align: center;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.header-icon {
+  font-size: 3.5rem;
+  color: var(--primary-red);
+  margin-bottom: 15px;
+}
+
+.guide-header h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.subheading {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* --- Disclaimer Box --- */
+.disclaimer-box {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #b45309;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  margin-bottom: 30px;
+}
+
+/* --- General Section --- */
+.guide-section {
+  margin-bottom: 40px;
+}
+
+.guide-section h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--primary-red);
+  margin-bottom: 15px;
+}
+
+.guide-section p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* --- Eligibility List --- */
+.eligibility-list {
+  list-style: none;
+  padding-left: 0;
+  font-size: 1.1rem;
+}
+
+.eligibility-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.icon-check {
+  color: #10b981; /* Green */
+  font-size: 1.2rem;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* --- Process Timeline --- */
+.process-timeline {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+}
+
+.process-step {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 25px;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-number {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: var(--border-color);
+  z-index: 1;
+}
+
+.process-step h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.process-step p {
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.step-list {
+  list-style: none;
+  padding-left: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.step-list li {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.step-list li svg {
+  color: var(--primary-red);
+  font-size: 1rem;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* --- Call to Action Button --- */
+.guide-cta {
+  text-align: center;
+  border-top: 2px solid var(--border-color);
+  padding-top: 30px;
+  margin-top: 30px;
+}
+
+.guide-cta h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.guide-cta p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto 25px;
+}
+
+.guide-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 30px;
+  background-color: var(--primary-red);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.guide-cta-btn:hover {
+  background-color: #b01c25;
+  transform: translateY(-2px);
+}

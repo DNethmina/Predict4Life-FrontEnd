@@ -15,7 +15,7 @@ const Home = () => {
             predicting blood demand to save lives—before it's too late.
           </p>
           <div className="hero-btns">
-            <Link to="/signup" className="btn btn--primary">Become a Donor</Link>
+            <Link to="/donor-guide" className="btn btn--primary">Become a Donor</Link>
             <Link to="/about" className="btn btn--outline">Learn More</Link>
           </div>
         </div>
