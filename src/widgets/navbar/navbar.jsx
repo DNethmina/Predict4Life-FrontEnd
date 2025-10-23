@@ -21,14 +21,17 @@ const Navbar = ({theme, setTheme}) => {
 
       <ul className='nav-list'>
         <li><NavLink to="/" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Home</NavLink></li>
-        <li><NavLink to="/donate" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Donate</NavLink></li>
-        <li><NavLink to="/Contact" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Contact Us</NavLink></li>
+        
         <li><NavLink to="/about" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>About Us</NavLink></li>
+        <li><NavLink to="/contact" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Contact Us</NavLink></li>
       </ul>
 
       <div className="nav-right">
         <Link to="/login">
           <button className="login-button">Login</button>
+        </Link>
+        <Link to="/signup">
+          <button className="signup-button">Sign Up</button>
         </Link>
         <img 
           onClick={toggle_mode} 

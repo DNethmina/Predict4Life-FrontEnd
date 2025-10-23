@@ -1,0 +1,80 @@
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import Navbar from './widgets/navbar/Navbar.jsx';
+import Dashboard from './pages/dashboard/dashboard.jsx';
+import LoginForm from './pages/login/LoginForm.jsx';
+import Sidebar from './widgets/sidebar/sidebar.jsx';
+import './App.css';
+
+const App = () => {
+  const current_theme = localStorage.getItem('current_theme');
+  const [theme, setTheme] = useState(current_theme ? current_theme : 'light');
+  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const location = useLocation();
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!isSidebarCollapsed);
+  };
+
+  useEffect(() => {
+    localStorage.setItem('current_theme', theme);
+  }, [theme]);
+
+  const isAuthenticated = () => {
+    return !!localStorage.getItem('authToken');
+  };
+
+  const ProtectedRoute = ({ children }) => {
+    if (!isAuthenticated()) {
+      return <Navigate to="/login" replace state={{ from: location }} />;
+    }
+    return children;
+  };
+
+  const DashboardLayout = () => (
+    <div className={`app-wrapper ${theme}`}>
+      <Sidebar 
+        theme={theme}
+        setTheme={setTheme}
+        isCollapsed={isSidebarCollapsed} 
+        toggleSidebar={toggleSidebar} 
+      />
+      <div className={`content-wrapper ${isSidebarCollapsed ? 'collapsed' : ''}`}>
+        <Navbar theme={theme} setTheme={setTheme} />
+        <div className="page-content">
+          <Dashboard theme={theme} />
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <Routes>
+      <Route path="/login" element={
+        isAuthenticated() ? (
+          <Navigate to="/dashboard" replace />
+        ) : (
+          <div className={`app-wrapper ${theme}`}>
+            <LoginForm />
+          </div>
+        )
+      } />
+      
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <DashboardLayout />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/" element={
+        <Navigate to={isAuthenticated() ? "/dashboard" : "/login"} replace />
+      } />
+
+      <Route path="*" element={
+        <Navigate to="/" replace />
+      } />
+    </Routes>
+  );
+};
+
+export default App;

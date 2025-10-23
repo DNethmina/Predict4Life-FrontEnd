@@ -1,27 +1,68 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-// Corrected import paths based on the file structure
+
 import "./login.css";
-import { loginUser } from "../../services/api";
+
 import logo from "../../assets/images/logo-black.png";
 
-// Renamed component to match the filename "LoginForm.jsx"
+// API call helper
+const loginUser = async (credentials) => {
+    try {
+        const response = await fetch("https://predict4-life-gateway-service.vercel.app/api/auth/login", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(credentials),
+        });
+
+        const data = await response.json();
+
+        // Check for specific status codes
+        if (response.status === 401) {
+            throw new Error("Invalid email or password");
+        } else if (response.status === 403) {
+            throw new Error("Account is locked. Please contact support");
+        } else if (!response.ok) {
+            throw new Error(data.message || "Login failed. Please try again");
+        }
+
+        // If successful (status 200)
+        if (response.status === 200 && data.token) {
+            return {
+                token: data.token,
+                user: data.user // If the API returns user data
+            };
+        } else {
+            throw new Error("Invalid response from server");
+        }
+    } catch (error) {
+        if (error.name === 'TypeError') {
+            throw new Error("Network error. Please check your connection");
+        }
+        throw error;
+    }
+};
+
 const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+
     const navigate = useNavigate();
 
-    const validateEmail = (email) => {
-        return email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-    };
+    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError("");
+        setSuccessMessage("");
 
+        // Input validation
         if (!email || !password) {
             setError("Please enter both email and password.");
             return;
@@ -40,15 +81,29 @@ const LoginForm = () => {
         try {
             setIsLoading(true);
             const response = await loginUser({ email, password });
-            
+
             if (response.token) {
+                // Store token in localStorage
                 localStorage.setItem("authToken", response.token);
-                navigate("/"); // Redirect to home page
+                
+                // Store user data if available
+                if (response.user) {
+                    localStorage.setItem("user", JSON.stringify(response.user));
+                }
+
+                // Set success message
+                setSuccessMessage("Login successful! Welcome back!");
+
+                // Redirect after short delay
+                setTimeout(() => {
+                    navigate("/dashboard"); // Redirect to dashboard
+                }, 1500);
             } else {
-                setError("Invalid response from server");
+                throw new Error("No token received from server");
             }
+
         } catch (err) {
-            setError(err.response?.data?.message || "An error occurred during login");
+            setError(err.message);
         } finally {
             setIsLoading(false);
         }
@@ -75,6 +130,7 @@ const LoginForm = () => {
                                 required
                             />
                         </div>
+
                         <div className="input-group">
                             <label htmlFor="password">Password</label>
                             <input
@@ -86,18 +142,19 @@ const LoginForm = () => {
                                 required
                             />
                         </div>
-                        
+
                         <div className="login-options">
                             <Link to="/forgot-password" className="forgot-password-link">
                                 Forgot Password?
                             </Link>
                         </div>
-                        
-                        {error && <p className="error-message">{error}</p>}
 
-                        <button 
-                            type="submit" 
-                            className="login-button" 
+                        {error && <div className="error-message">{error}</div>}
+                        {successMessage && <div className="success-message">{successMessage}</div>}
+
+                        <button
+                            type="submit"
+                            className="login-button"
                             disabled={isLoading}
                         >
                             {isLoading ? 'Signing in...' : 'Sign In'}

@@ -1,5 +1,5 @@
 .navbar {
-    width: calc(100% - var(--sidebar-width));
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -8,14 +8,27 @@
     transition: all 0.3s ease;
     position: fixed;
     top: 0;
+    left: 0;
     right: 0;
     height: var(--navbar-height);
     border-bottom: 1px solid var(--border-color);
     z-index: 100;
 }
 
-/* Adjust navbar width when sidebar is collapsed */
-.sidebar.collapsed ~ .content-wrapper .navbar {
+/* Public pages navbar style */
+.app-wrapper:not(.dashboard) .navbar {
+    position: fixed;
+    width: 100%;
+}
+
+/* Dashboard navbar style - when sidebar is present */
+.dashboard .navbar {
+    width: calc(100% - var(--sidebar-width));
+    left: auto;
+}
+
+/* Adjust navbar width when sidebar is collapsed in dashboard */
+.dashboard .sidebar.collapsed ~ .content-wrapper .navbar {
     width: calc(100% - var(--sidebar-width-collapsed));
 }
 
@@ -146,23 +159,39 @@
     gap: 1.5rem;
 }
 
-.login-button {
-    background-color: transparent;
-    color: #dc2626;
+.login-button, .signup-button {
     padding: 0.5rem 1.5rem;
     border-radius: 8px;
-    border: 2px solid #dc2626;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 1rem;
 }
 
+.login-button {
+    background-color: transparent;
+    color: #dc2626;
+    border: 2px solid #dc2626;
+}
+
+.signup-button {
+    background-color: #dc2626;
+    color: white;
+    border: 2px solid #dc2626;
+}
+
+.login-button:hover, .signup-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
 .login-button:hover {
     background-color: #dc2626;
     color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.signup-button:hover {
+    background-color: #b91c1c;
 }
 
 .dark .login-button {
@@ -171,7 +200,17 @@
     color: #fff;
 }
 
+.dark .signup-button {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: #fff;
+}
+
 .dark .login-button:hover {
     background-color: #ef4444;
     color: #fff;
+}
+
+.dark .signup-button:hover {
+    background-color: #dc2626;
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './sidebar.css';
 import { 
   FaBars, 
@@ -7,10 +8,22 @@ import {
   FaCalendarAlt,
   FaSignOutAlt,
   FaSun,
-  FaMoon
+  FaMoon,
+  FaHome
 } from 'react-icons/fa';
 
 const Sidebar = ({ isCollapsed, toggleSidebar, theme, setTheme }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear authentication token
+    localStorage.removeItem('authToken');
+    // Clear any other user data
+    localStorage.removeItem('user');
+    // Redirect to home page
+    navigate('/');
+  };
+
   return (
     <div className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${theme === 'dark' ? 'sidebar--dark' : ''}`}>
       <div className="sidebar-header">
@@ -21,29 +34,38 @@ const Sidebar = ({ isCollapsed, toggleSidebar, theme, setTheme }) => {
       </div>
 
       <ul className="menu-items">
+        {/* Home Link */}
+        <li className="item">
+          <button onClick={() => navigate('/')}>
+            <FaHome className="menu-icon" />
+            <span className="menu-text">Home</span>
+          </button>
+        </li>
+
         {/* Dashboard Link */}
         <li className="item active">
-          <a href="#">
+          <button onClick={() => navigate('/dashboard')}>
             <FaTachometerAlt className="menu-icon" />
             <span className="menu-text">Dashboard</span>
-          </a>
+          </button>
         </li>
         
         {/* Donors Link */}
         <li className="item">
-          <a href="#">
+          <button onClick={() => navigate('/donors')}>
             <FaUserInjured className="menu-icon" />
             <span className="menu-text">Donors</span>
-          </a>
+          </button>
         </li>
 
         {/* Events Link */}
         <li className="item">
-          <a href="#">
+          <button onClick={() => navigate('/events')}>
             <FaCalendarAlt className="menu-icon" />
             <span className="menu-text">Events</span>
-          </a>
+          </button>
         </li>
+
       </ul>
 
       <div className="sidebar-footer">
@@ -56,11 +78,11 @@ const Sidebar = ({ isCollapsed, toggleSidebar, theme, setTheme }) => {
           <span className="menu-text">{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
         </button>
 
-        {/* Logout Link */}
-        <a href="#">
+        {/* Logout Button */}
+        <button onClick={handleLogout} className="logout-btn">
           <FaSignOutAlt className="menu-icon" />
           <span className="menu-text">Logout</span>
-        </a>
+        </button>
       </div>
     </div>
   );

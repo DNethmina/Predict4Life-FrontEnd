@@ -1,11 +1,54 @@
 // src/pages/signup/signup.jsx
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './signup.css'; // Import the stylesheet
+import { Link, useNavigate } from 'react-router-dom';
+import './signup.css';
 import logo from "../../assets/images/logo-black.png";
 
+// API call helper
+const registerUser = async (userData) => {
+  try {
+    const response = await fetch("https://predict4-life-gateway-service.vercel.app/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const data = await response.json();
+
+    // Check specific status codes
+    if (response.status === 409) {
+      throw new Error("Email already registered");
+    } else if (response.status === 400) {
+      throw new Error(data.message || "Invalid registration data");
+    } else if (!response.ok) {
+      throw new Error(data.message || "Registration failed");
+    }
+
+    // If successful (status 200)
+    if (response.status === 200) {
+      return {
+        status: 200,
+        success: true,
+        message: "Registration successful",
+        data: data
+      };
+    }
+
+    return data;
+  } catch (error) {
+    if (error.name === 'TypeError') {
+      throw new Error("Network error. Please check your connection");
+    }
+    throw error;
+  }
+};
+
 const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,6 +58,8 @@ const Signup = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,15 +103,48 @@ const Signup = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({});
+    setSuccessMessage("");
     
     if (validateForm()) {
-      console.log('Form Submitted Successfully!');
-      console.log(formData);
-      // Here you would typically call an API to register the user
-    } else {
-      console.log('Form validation failed.');
+      try {
+        setIsLoading(true);
+        
+        // Prepare user data for API
+        const userData = {
+          name: formData.name,
+          email: formData.email,
+          contactNumber: formData.contactNumber,
+          password: formData.password
+        };
+
+        const response = await registerUser(userData);
+
+        // Check if registration was successful
+        if (response && (response.status === 200 || response.success)) {
+          setSuccessMessage("Registration successful! Redirecting to login...");
+          
+          // Clear form
+          setFormData({
+            name: '',
+            email: '',
+            contactNumber: '',
+            password: '',
+            rePassword: ''
+          });
+
+          // Redirect to login after 2 seconds
+          setTimeout(() => {
+            navigate('/login');
+          }, 2000);
+        }
+      } catch (error) {
+        setErrors({ submit: error.message });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -153,7 +231,25 @@ const Signup = () => {
             {errors.rePassword && <div className="error-message">{errors.rePassword}</div>}
           </div>
 
-          <button type="submit" className="submit-btn">Sign Up</button>
+          {errors.submit && (
+            <div className="error-message submit-error">
+              {errors.submit}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="success-message">
+              {successMessage}
+            </div>
+          )}
+
+          <button 
+            type="submit" 
+            className="submit-btn" 
+            disabled={isLoading}
+          >
+            {isLoading ? 'Creating Account...' : 'Sign Up'}
+          </button>
 
           <div className="bottom-text">
             Already have an account? <Link to="/login">Log In</Link>

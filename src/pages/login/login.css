@@ -119,6 +119,19 @@
     font-size: 14px;
 }
 
+.signup-text .signup-link {
+    color: #ef4444;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 5px;
+    transition: all 0.3s ease;
+}
+
+.signup-text .signup-link:hover {
+    color: #b91c1c;
+    text-decoration: underline;
+}
+
 .error-message {
     color: #991b1b;
     background-color: #fee2e2;
@@ -128,4 +141,24 @@
     text-align: center;
     margin-bottom: 20px;
     font-size: 14px;
+}
+
+.success-message {
+    color: #047857;
+    background-color: #ecfdf5;
+    border: 1px solid #6ee7b7;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Disabled button state */
+.login-button:disabled {
+    background: linear-gradient(to right, #f1a5a5, #e98b8b);
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.7;
 }
