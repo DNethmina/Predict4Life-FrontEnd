@@ -5,32 +5,21 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
   LabelList, Cell
 } from 'recharts';
+import L from 'leaflet';
 import { FaMapPin, FaTint, FaFilter } from 'react-icons/fa';
 import 'leaflet/dist/leaflet.css';
 import './Donar.css'; 
 
-// --- 2. MOCK DATA (Now with lat/lng) ---
-const allDonors = [
-  { id: 1, name: 'John Doe', contact: '077-1234567', address: '123 Galle Rd, Colombo 3', location: 'Colombo', bloodGroup: 'O+', lat: 6.8835, lng: 79.8524 },
-  { id: 2, name: 'Jane Smith', contact: '071-8765432', address: '456 Kandy Rd, Kandy', location: 'Kandy', bloodGroup: 'A+', lat: 7.2906, lng: 80.6337 },
-  { id: 3, name: 'Sam Wilson', contact: '072-1112223', address: '789 Temple St, Kandy', location: 'Kandy', bloodGroup: 'B+', lat: 7.2930, lng: 80.6350 },
-  { id: 4, name: 'Lisa Ray', contact: '076-4455667', address: '101 Marine Dr, Colombo 6', location: 'Colombo', bloodGroup: 'A+', lat: 6.8732, lng: 79.8596 },
-  { id: 5, name: 'Mike Ross', contact: '078-9988776', address: '222 Lake Rd, Kandy', location: 'Kandy', bloodGroup: 'O-', lat: 7.2914, lng: 80.6360 },
-  { id: 6, name: 'Aruni Perera', contact: '075-3322114', address: '333 Lighthouse St, Galle', location: 'Galle', bloodGroup: 'AB+', lat: 6.0264, lng: 80.2170 },
-  { id: 7, name: 'David Lee', contact: '077-5554443', address: '444 Fort, Galle', location: 'Galle', bloodGroup: 'O+', lat: 6.0240, lng: 80.2150 },
-  { id: 8, name: 'Nimal Silva', contact: '071-2223334', address: '555 High St, Colombo 4', location: 'Colombo', bloodGroup: 'B-', lat: 6.8900, lng: 79.8510 },
-];
+// Blood group and location options
 
-const locations = ['All', 'Colombo', 'Kandy', 'Galle', 'Jaffna', 'Matara'];
+// Cities will be dynamically populated from data
 const bloodGroups = ['All', 'A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
-const getBloodGroupCounts = (donors, location) => {
-  const filtered = location === 'All' 
-    ? donors 
-    : donors.filter(d => d.location === location);
-
-  const counts = filtered.reduce((acc, donor) => {
-    acc[donor.bloodGroup] = (acc[donor.bloodGroup] || 0) + 1;
+const getBloodGroupCounts = (donors) => {
+  const counts = donors.reduce((acc, donor) => {
+    if (donor.blood_group && donor.blood_group !== 'N/A') {
+      acc[donor.blood_group] = (acc[donor.blood_group] || 0) + 1;
+    }
     return acc;
   }, {});
 
@@ -41,50 +30,134 @@ const getBloodGroupCounts = (donors, location) => {
 };
 
 // --- 3. Location coordinates mapping ---
+const defaultCoordinates = { center: [7.8731, 80.7718], zoom: 7 }; // Sri Lanka center
+
+// Custom marker icon
+const customIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
 const locationCoordinates = {
+  'All': defaultCoordinates,
   'Colombo': { center: [6.9271, 79.8612], zoom: 12 },
   'Kandy': { center: [7.2906, 80.6337], zoom: 13 },
   'Galle': { center: [6.0329, 80.2168], zoom: 13 },
   'Jaffna': { center: [9.6615, 80.0255], zoom: 12 },
   'Matara': { center: [5.9549, 80.5550], zoom: 13 },
-  'All': { center: [7.8731, 80.7718], zoom: 7 }  // Sri Lanka center
+  'Anuradhapura': { center: [8.3114, 80.4037], zoom: 13 },
+  'Negombo': { center: [7.2111, 79.8386], zoom: 13 },
+  'Kurunegala': { center: [7.4818, 80.3609], zoom: 13 }
 };
 
 // Map Controller Component to handle view updates
-const MapController = ({ selectedLocation }) => {
+const MapController = ({ selectedLocation, filteredDonors }) => {
   const map = useMap();
 
   useEffect(() => {
-    const { center, zoom } = locationCoordinates[selectedLocation];
-    map.setView(center, zoom, {
-      animate: true,
-      duration: 1
-    });
-  }, [selectedLocation, map]);
+    if (filteredDonors.length > 0) {
+      // Calculate center based on filtered donors
+      const lats = filteredDonors.map(d => d.lat);
+      const lngs = filteredDonors.map(d => d.lng);
+      const centerLat = (Math.max(...lats) + Math.min(...lats)) / 2;
+      const centerLng = (Math.max(...lngs) + Math.min(...lngs)) / 2;
+      
+      // Adjust zoom level based on the number of donors
+      const zoom = selectedLocation === 'All' ? 7 : 13;
+      map.setView([centerLat, centerLng], zoom);
+    } else {
+      // If no donors match the filter, show default view
+      const coords = locationCoordinates[selectedLocation] || defaultCoordinates;
+      map.setView(coords.center, coords.zoom);
+    }
+  }, [selectedLocation, filteredDonors, map]);
 
   return null;
 };
 
 const Donor = () => {
+  const [allDonors, setAllDonors] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState('All');
   const [selectedBloodGroup, setSelectedBloodGroup] = useState('All');
-  const [filteredDonors, setFilteredDonors] = useState(allDonors);
-  const [chartData, setChartData] = useState(getBloodGroupCounts(allDonors, 'All'));
+  const [filteredDonors, setFilteredDonors] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [availableLocations, setAvailableLocations] = useState(['All']);
+
+  // Fetch donors data from API
+  useEffect(() => {
+    const fetchDonors = async () => {
+      try {
+        const response = await fetch('https://predict4-life-donor-service.vercel.app/api/donors');
+        if (!response.ok) {
+          throw new Error('Failed to fetch donor data');
+        }
+        const data = await response.json();
+        
+        // Log the first donor data to check fields
+        if (data.length > 0) {
+          console.log('First donor data from API:', data[0]);
+          console.log('Available fields:', Object.keys(data[0]));
+        }
+        
+        // Transform the data to match our structure
+        const transformedData = data.map(donor => {
+          // Extract city from address (assuming format: "street, city")
+          const addressParts = (donor.address || '').split(',');
+          const city = addressParts.length > 1 ? addressParts[addressParts.length - 1].trim() : 'Unknown';
+          
+          return {
+            id: donor._id,
+            name: donor.name || 'N/A',
+            blood_group: donor.blood_group || 'N/A',
+            contact_number: donor.contact_number || 'N/A',
+            last_donation_date: donor.last_donation_date ? new Date(donor.last_donation_date).toLocaleDateString() : 'N/A',
+            address: donor.address || 'N/A',
+            city: city,
+            lat: donor.latitude || 0,
+            lng: donor.longitude || 0
+          };
+        });
+
+        console.log('Fetched donor data:', transformedData);
+        
+        // Extract unique cities and sort them
+        const cities = [...new Set(transformedData.map(donor => donor.city))].sort();
+        setAvailableLocations(['All', ...cities]);
+        
+        setAllDonors(transformedData);
+        setFilteredDonors(transformedData);
+        setChartData(getBloodGroupCounts(transformedData));
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Error fetching donors:', err);
+        setError(err.message);
+        setIsLoading(false);
+      }
+    };
+
+    fetchDonors();
+  }, []);
 
   useEffect(() => {
     let donorsForTable = allDonors;
     if (selectedLocation !== 'All') {
-      donorsForTable = donorsForTable.filter(d => d.location === selectedLocation);
+      donorsForTable = donorsForTable.filter(d => d.city === selectedLocation);
     }
     if (selectedBloodGroup !== 'All') {
-      donorsForTable = donorsForTable.filter(d => d.bloodGroup === selectedBloodGroup);
+      donorsForTable = donorsForTable.filter(d => d.blood_group === selectedBloodGroup);
     }
     setFilteredDonors(donorsForTable);
 
-    const newChartData = getBloodGroupCounts(allDonors, selectedLocation);
+    const newChartData = getBloodGroupCounts(donorsForTable);
     setChartData(newChartData);
 
-  }, [selectedLocation, selectedBloodGroup]);
+  }, [selectedLocation, selectedBloodGroup, allDonors]);
 
 
   return (
@@ -105,7 +178,7 @@ const Donor = () => {
             value={selectedLocation}
             onChange={(e) => setSelectedLocation(e.target.value)}
           >
-            {locations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+            {availableLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
           </select>
         </div>
         <div className="filter-group">
@@ -182,18 +255,26 @@ const Donor = () => {
             scrollWheelZoom={false} 
             className="map-container"
           >
-            <MapController selectedLocation={selectedLocation} />
+            <MapController selectedLocation={selectedLocation} filteredDonors={filteredDonors} />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {/* --- 5. Add Markers Dynamically --- */}
             {filteredDonors.map(donor => (
-              <Marker key={donor.id} position={[donor.lat, donor.lng]}>
-                <Popup>
-                  <b>{donor.name}</b> ({donor.bloodGroup})<br />
-                  {donor.contact}<br />
-                  {donor.address}
+              <Marker 
+                key={donor.id} 
+                position={[donor.lat, donor.lng]}
+                icon={customIcon}
+              >
+                <Popup className="donor-popup">
+                  <div className="donor-popup-content">
+                    <h4>{donor.name}</h4>
+                    <p><strong>Blood Group:</strong> {donor.blood_group}</p>
+                    <p><strong>Contact:</strong> {donor.contact_number}</p>
+                    <p><strong>Address:</strong> {donor.address}</p>
+                    <p><strong>Last Donation:</strong> {donor.last_donation_date}</p>
+                  </div>
                 </Popup>
               </Marker>
             ))}
@@ -207,36 +288,42 @@ const Donor = () => {
         {/* ... Table (Unchanged) ... */}
         <p>Showing {filteredDonors.length} donors matching your criteria</p>
         <div className="table-wrapper">
-          <table className="donors-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Blood Group</th>
-                <th>Contact</th>
-                <th>Location</th>
-                <th>Address</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredDonors.length > 0 ? (
-                filteredDonors.map(donor => (
-                  <tr key={donor.id}>
-                    <td>{donor.name}</td>
-                    <td><span className="blood-group-tag">{donor.bloodGroup}</span></td>
-                    <td>{donor.contact}</td>
-                    <td>{donor.location}</td>
-                    <td>{donor.address}</td>
-                  </tr>
-                ))
-              ) : (
+          {isLoading ? (
+            <div className="loading-message">Loading donor data...</div>
+          ) : error ? (
+            <div className="error-message">{error}</div>
+          ) : (
+            <table className="donors-table">
+              <thead>
                 <tr>
-                  <td colSpan="5" className="no-donors-found">
-                    No donors found matching your criteria.
-                  </td>
+                  <th>Name</th>
+                  <th>Blood Group</th>
+                  <th>Contact</th>
+                  <th>Last Donation</th>
+                  <th>Address</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredDonors.length > 0 ? (
+                  filteredDonors.map(donor => (
+                    <tr key={donor.id}>
+                      <td>{donor.name}</td>
+                      <td><span className="blood-group-tag">{donor.blood_group}</span></td>
+                      <td>{donor.contact_number}</td>
+                      <td>{donor.last_donation_date}</td>
+                      <td>{donor.address}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="no-donors-found">
+                      No donors found matching your criteria.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

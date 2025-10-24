@@ -12,9 +12,9 @@ import teamMember3 from '../assets/images/member3.jpg';
 
 const About = () => {
   const team = [
-    { name: 'Dr. Aruni Silva', role: 'Founder & Lead Researcher', image: teamMember1 },
-    { name: 'Kavindu Perera', role: 'Lead Software Engineer', image: teamMember2 },
-    { name: 'Fathima Rizwan', role: 'Community Outreach Coordinator', image: teamMember3 },
+    { name: 'Deshan Nethmina', role: 'Frontend Engineer', image: teamMember1 },
+    { name: 'Harindu De Silva', role: 'Backend Engineer', image: teamMember2 },
+    { name: 'Hasodya Gayathran', role: 'UI/UX Engineer', image: teamMember3 },
   ];
 
   const values = [

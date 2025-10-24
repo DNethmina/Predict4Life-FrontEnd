@@ -48,7 +48,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar, theme, setTheme }) => {
         </li>
 
         {/* Dashboard Link */}
-        <li className="item active">
+        <li className="item">
           <button onClick={() => navigate('/dashboard')}>
             <FaTachometerAlt className="menu-icon" />
             <span className="menu-text">Dashboard</span>
@@ -62,14 +62,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar, theme, setTheme }) => {
             <span className="menu-text">Donors</span>
           </button>
         </li>
-
-        {/* Events Link */}
-        <li className="item">
-          <button onClick={() => navigate('/events')}>
-            <FaCalendarAlt className="menu-icon" />
-            <span className="menu-text">Events</span>
-          </button>
-        </li>
+        
 
         {/* Forms Section */}
         <li className="section-title">
