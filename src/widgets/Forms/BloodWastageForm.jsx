@@ -1,241 +1,232 @@
 import React, { useState } from 'react';
-import { FaUpload, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
-import './PredictionForm.css'; // Re-using the same CSS file!
-
-const options = {
-  bloodGroups: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
-  donationTypes: ['Voluntary', 'Replacement', 'Directed'],
-  hospitalNames: ['Colombo General', 'Kandy Hospital', 'Galle Hospital', 'Jaffna Hospital', 'Matara Hospital'],
-  cities: ['Colombo', 'Kandy', 'Galle', 'Jaffna', 'Matara', 'Gampaha', 'Kurunegala'],
-  regions: ['Western', 'Central', 'Southern', 'Northern', 'Eastern', 'North Western', 'North Central', 'Uva', 'Sabaragamuwa'],
-  dayTypes: ['Weekday', 'Weekend', 'Holiday'],
-  seasons: ['Dry', 'Rainy'],
-  reasons: ['Expired', 'Contaminated', 'Storage Error', 'Testing', 'Other']
-};
-
-const getInitialDateState = () => {
-  const today = new Date();
-  return {
-    expiry_date: today.toISOString().split('T')[0],
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
-    weekday: today.getDay(),
-  };
-};
-
-const initialState = {
-  blood_group: 'O+',
-  donation_type: 'Voluntary',
-  hospital_name: 'Galle Hospital',
-  city: 'Galle',
-  region: 'Southern',
-  ...getInitialDateState(),
-  day_type: 'Weekday',
-  season: 'Dry',
-  population_density: 3000,
-  hospital_count: 3,
-  donation_drives: 2,
-  previous_week_collection: 100,
-  hospital_demand: 50,
-  emergency_cases: 2,
-  staff_on_duty: 5,
-  reason: 'Expired'
-};
+import { FaUpload } from 'react-icons/fa';
+import './PredictionForm.css';
 
 const BloodWastageForm = () => {
-  const [formData, setFormData] = useState(initialState);
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [apiResponse, setApiResponse] = useState(null);
+  const [formData, setFormData] = useState({
+    bloodGroup: '',
+    city: '',
+    month: '',
+    season: '',
+    temperature: '',
+    humidity: '',
+    storageCondition: '',
+    transportationTime: '',
+    processingDelay: '',
+    qualityControl: '',
+    inventoryAge: ''
+  });
 
-  const validate = (name, value) => {
-    if (value === '' || value === null) return 'This field is required.';
-    const numberValue = parseFloat(value);
-    if (['population_density', 'hospital_count', 'donation_drives', 'previous_week_collection', 'hospital_demand', 'emergency_cases', 'staff_on_duty'].includes(name)) {
-      if (numberValue < 0) return 'Cannot be negative.';
-    }
-    return null;
-  };
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [response, setResponse] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    let finalValue = type === 'number' ? (value === '' ? '' : parseFloat(value)) : value;
-
-    if (name === 'expiry_date') {
-      const date = new Date(value);
-      const newDateState = {
-        expiry_date: value,
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-        weekday: date.getDay(),
-      };
-      const dayType = (date.getDay() === 0 || date.getDay() === 6) ? 'Weekend' : 'Weekday';
-      
-      setFormData(prev => ({ ...prev, ...newDateState, day_type: dayType }));
-      Object.keys(newDateState).forEach(key => {
-        setErrors(prev => ({ ...prev, [key]: null }));
-      });
-
-    } else {
-      setFormData(prev => ({ ...prev, [name]: finalValue }));
-      setErrors(prev => ({ ...prev, [name]: validate(name, finalValue) }));
-    }
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setApiResponse(null);
-    let tempErrors = {};
-    let formIsValid = true;
-    Object.keys(formData).forEach(key => {
-      const error = validate(key, formData[key]);
-      if (error) {
-        tempErrors[key] = error;
-        formIsValid = false;
-      }
-    });
-    setErrors(tempErrors);
 
-    if (!formIsValid) return;
+
     setIsSubmitting(true);
-    
+    setError(null);
+    setResponse(null);
+
     try {
-      const response = await fetch('http://localhost:8000/predict/randomforest_blood_wastage', {
+      const res = await fetch('http://localhost:8080/api/ml/usage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: formData }) 
+        body: JSON.stringify(formData),
       });
 
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.detail || 'API Error');
-      setApiResponse({ success: true, data: result });
-    } catch (err) {
-      setApiResponse({ success: false, message: err.message });
-    } finally {
-      setIsSubmitting(false);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Prediction failed');
+      setResponse(data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setError('Something went wrong. Please try again.');
     }
+    setIsSubmitting(false);
   };
+
+  const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+  const cities = ['Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya'];
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  const seasons = ['Dry', 'Wet', 'Intermediate'];
+  const storageConditions = ['Optimal', 'Sub-optimal', 'Poor'];
+  const qualityLevels = ['High', 'Medium', 'Low'];
 
   return (
     <div className="prediction-form-wrapper">
-      <form onSubmit={handleSubmit} className="dashboard-card prediction-form">
-        <h2>Blood Wastage Prediction Form</h2>
-        <p className="form-description">Fill in the details below to predict blood wastage.</p>
+      <form className="prediction-form" onSubmit={handleSubmit}>
+        <h2>Blood Wastage Prediction</h2>
+        <p className="form-description">
+          Predict blood wastage based on environmental and operational factors.
+        </p>
+
+        {error && <div className="error-message">{error}</div>}
+
+        {/* =========================== */}
+        {/*       RESPONSE SECTION       */}
+        {/* =========================== */}
+        {response && (
+          <div className="response-message">
+            <h3>Prediction Result</h3>
+            <p><strong>Blood Group:</strong> {response.blood_group}</p>
+            <h4>Weekly Forecast for Next 3 Months:</h4>
+
+            <div className="forecast-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Week</th>
+                    <th>Predicted Usage (Units)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {response.weekly_forecast_next_3_months.map((value, index) => (
+                    <tr key={index}>
+                      <td>Week {index + 1}</td>
+                      <td>{value.toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
         <fieldset>
-          <legend>Unit & Location Details</legend>
-          <div className="form-grid-4">
-            <FormGroup label="Blood Group" error={errors.blood_group}>
-              <select name="blood_group" value={formData.blood_group} onChange={handleChange} className={errors.blood_group ? 'is-invalid' : ''}>
-                {options.bloodGroups.map(bg => <option key={bg} value={bg}>{bg}</option>)}
+          <legend>Basic Information</legend>
+          <div className="form-grid-3">
+            <div className="form-group">
+              <label htmlFor="bloodGroup">Blood Group</label>
+              <select id="bloodGroup" name="bloodGroup" value={formData.bloodGroup} onChange={handleChange} required>
+                <option value="">Select Blood Group</option>
+                {bloodGroups.map(group => (
+                  <option key={group} value={group}>{group}</option>
+                ))}
               </select>
-            </FormGroup>
-            <FormGroup label="Donation Type" error={errors.donation_type}>
-              <select name="donation_type" value={formData.donation_type} onChange={handleChange} className={errors.donation_type ? 'is-invalid' : ''}>
-                {options.donationTypes.map(type => <option key={type} value={type}>{type}</option>)}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="city">City</label>
+              <select id="city" name="city" value={formData.city} onChange={handleChange} required>
+                <option value="">Select City</option>
+                {cities.map(city => (
+                  <option key={city} value={city}>{city}</option>
+                ))}
               </select>
-            </FormGroup>
-            <FormGroup label="Hospital Name" error={errors.hospital_name}>
-              <select name="hospital_name" value={formData.hospital_name} onChange={handleChange} className={errors.hospital_name ? 'is-invalid' : ''}>
-                {options.hospitalNames.map(name => <option key={name} value={name}>{name}</option>)}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="month">Month</label>
+              <select id="month" name="month" value={formData.month} onChange={handleChange} required>
+                <option value="">Select Month</option>
+                {months.map(month => (
+                  <option key={month} value={month}>{month}</option>
+                ))}
               </select>
-            </FormGroup>
-            <FormGroup label="Wastage Reason" error={errors.reason}>
-              <select name="reason" value={formData.reason} onChange={handleChange} className={errors.reason ? 'is-invalid' : ''}>
-                {options.reasons.map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
-            </FormGroup>
-            <FormGroup label="City" error={errors.city}>
-              <select name="city" value={formData.city} onChange={handleChange} className={errors.city ? 'is-invalid' : ''}>
-                {options.cities.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </FormGroup>
-            <FormGroup label="Region" error={errors.region}>
-              <select name="region" value={formData.region} onChange={handleChange} className={errors.region ? 'is-invalid' : ''}>
-                {options.regions.map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
-            </FormGroup>
+            </div>
           </div>
         </fieldset>
 
         <fieldset>
-          <legend>Date & Environment</legend>
-          <div className="form-grid-4">
-            <FormGroup label="Expiry Date" error={errors.expiry_date}>
-              <input type="date" name="expiry_date" value={formData.expiry_date} onChange={handleChange} className={errors.expiry_date ? 'is-invalid' : ''} />
-            </FormGroup>
-            <FormGroup label="Day Type" error={errors.day_type}>
-              <select name="day_type" value={formData.day_type} onChange={handleChange} className={errors.day_type ? 'is-invalid' : ''}>
-                {options.dayTypes.map(type => <option key={type} value={type}>{type}</option>)}
+          <legend>Environmental Factors</legend>
+          <div className="form-grid-3">
+            <div className="form-group">
+              <label htmlFor="season">Season</label>
+              <select id="season" name="season" value={formData.season} onChange={handleChange} required>
+                <option value="">Select Season</option>
+                {seasons.map(season => (
+                  <option key={season} value={season}>{season}</option>
+                ))}
               </select>
-            </FormGroup>
-            <FormGroup label="Season" error={errors.season}>
-              <select name="season" value={formData.season} onChange={handleChange} className={errors.season ? 'is-invalid' : ''}>
-                {options.seasons.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </FormGroup>
-          </div>
-        </fieldset>
-        
-        <fieldset>
-          <legend>Operational Data</legend>
-          <div className="form-grid-4">
-            <FormGroup label="Population Density" error={errors.population_density}>
-              <input type="number" name="population_density" value={formData.population_density} onChange={handleChange} className={errors.population_density ? 'is-invalid' : ''} />
-            </FormGroup>
-            <FormGroup label="Hospital Count" error={errors.hospital_count}>
-              <input type="number" name="hospital_count" value={formData.hospital_count} onChange={handleChange} className={errors.hospital_count ? 'is-invalid' : ''} />
-            </FormGroup>
-            <FormGroup label="Donation Drives" error={errors.donation_drives}>
-              <input type="number" name="donation_drives" value={formData.donation_drives} onChange={handleChange} className={errors.donation_drives ? 'is-invalid' : ''} />
-            </FormGroup>
-            <FormGroup label="Previous Week's Collection" error={errors.previous_week_collection}>
-              <input type="number" name="previous_week_collection" value={formData.previous_week_collection} onChange={handleChange} className={errors.previous_week_collection ? 'is-invalid' : ''} />
-            </FormGroup>
-            <FormGroup label="Hospital Demand" error={errors.hospital_demand}>
-              <input type="number" name="hospital_demand" value={formData.hospital_demand} onChange={handleChange} className={errors.hospital_demand ? 'is-invalid' : ''} />
-            </FormGroup>
-            <FormGroup label="Emergency Cases" error={errors.emergency_cases}>
-              <input type="number" name="emergency_cases" value={formData.emergency_cases} onChange={handleChange} className={errors.emergency_cases ? 'is-invalid' : ''} />
-            </FormGroup>
-            <FormGroup label="Staff on Duty" error={errors.staff_on_duty}>
-              <input type="number" name="staff_on_duty" value={formData.staff_on_duty} onChange={handleChange} className={errors.staff_on_duty ? 'is-invalid' : ''} />
-            </FormGroup>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="temperature">Temperature (°C)</label>
+              <input type="number" id="temperature" name="temperature" value={formData.temperature} onChange={handleChange} required min="0" max="50" step="0.1" />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="humidity">Humidity (%)</label>
+              <input type="number" id="humidity" name="humidity" value={formData.humidity} onChange={handleChange} required min="0" max="100" step="0.1" />
+            </div>
           </div>
         </fieldset>
 
-        <div className="form-submit-area">
+        <fieldset>
+          <legend>Operational Factors</legend>
+          <div className="form-grid-3">
+            <div className="form-group">
+              <label htmlFor="storageCondition">Storage Condition</label>
+              <select id="storageCondition" name="storageCondition" value={formData.storageCondition} onChange={handleChange} required>
+                <option value="">Select Storage Condition</option>
+                {storageConditions.map(condition => (
+                  <option key={condition} value={condition}>{condition}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="transportationTime">Transportation Time (hours)</label>
+              <input type="number" id="transportationTime" name="transportationTime" value={formData.transportationTime} onChange={handleChange} required min="0" max="72" step="0.5" />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="processingDelay">Processing Delay (hours)</label>
+              <input type="number" id="processingDelay" name="processingDelay" value={formData.processingDelay} onChange={handleChange} required min="0" max="48" step="0.5" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Quality Metrics</legend>
+          <div className="form-grid-2">
+            <div className="form-group">
+              <label htmlFor="qualityControl">Quality Control Level</label>
+              <select id="qualityControl" name="qualityControl" value={formData.qualityControl} onChange={handleChange} required>
+                <option value="">Select Quality Level</option>
+                {qualityLevels.map(level => (
+                  <option key={level} value={level}>{level}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="inventoryAge">Inventory Age (days)</label>
+              <input type="number" id="inventoryAge" name="inventoryAge" value={formData.inventoryAge} onChange={handleChange} required min="0" max="42" step="1" />
+            </div>
+          </div>
+        </fieldset>
+
+        <div className="form-actions">
           <button type="submit" className="submit-btn" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : <><FaUpload /> Run Prediction</>}
-          </button>
-        </div>
-
-        {apiResponse && (
-          <div className={`api-response ${apiResponse.success ? 'success' : 'error'}`}>
-            {apiResponse.success ? (
+            {isSubmitting ? (
               <>
-                <FaCheckCircle />
-                <strong>Success!</strong> Predicted Wastage: {JSON.stringify(apiResponse.data.predicted_wastage)} units.
+                <div className="spinner"></div> Calculating...
               </>
             ) : (
               <>
-                <FaExclamationCircle />
-                <strong>Error:</strong> {apiResponse.message}
+                <FaUpload /> Run Prediction
               </>
             )}
-          </div>
-        )}
+          </button>
+        </div>
       </form>
     </div>
   );
 };
 
-const FormGroup = ({ label, children, error }) => (
-  <div className="form-group">
-    <label>{label}</label>
-    {children}
-    {error && <span className="error-message">{error}</span>}
-  </div>
-);
+
 
 export default BloodWastageForm;
