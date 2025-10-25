@@ -100,9 +100,14 @@ const BloodUsageForm = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('http://localhost:8000/predict/linearregression_blood_usage', {
+      const response = await fetch('http://localhost:8080/api/ml/blood-usage', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+         headers: {
+        'Content-Type': 'application/json',
+        // If your gateway requires authentication token:
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+
+      },
         body: JSON.stringify({ data: formData }) 
       });
 

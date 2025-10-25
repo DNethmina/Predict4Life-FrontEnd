@@ -88,38 +88,56 @@ const BloodCampForm = () => {
   };
   
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setApiResponse(null);
-    let tempErrors = {};
-    let formIsValid = true;
-    Object.keys(formData).forEach(key => {
-      const error = validate(key, formData[key]);
-      if (error) {
-        tempErrors[key] = error;
-        formIsValid = false;
-      }
-    });
-    setErrors(tempErrors);
+  e.preventDefault();
+  
+  console.log("✅ handleSubmit triggered");
+  setApiResponse(null);
 
-    if (!formIsValid) return;
-    setIsSubmitting(true);
-    
-    try {
-      const response = await fetch('http://localhost:8000/predict/linearregression_blood_camp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: formData }) 
-      });
-
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.detail || 'API Error');
-      setApiResponse({ success: true, data: result });
-    } catch (err) {
-      setApiResponse({ success: false, message: err.message });
-    } finally {
-      setIsSubmitting(false);
+  // Validate form
+  let tempErrors = {};
+  let formIsValid = true;
+  Object.keys(formData).forEach(key => {
+    const error = validate(key, formData[key]);
+    if (error) {
+      tempErrors[key] = error;
+      formIsValid = false;
     }
-  };
+  });
+  setErrors(tempErrors);
+  if (!formIsValid) return;
+
+  setIsSubmitting(true);
+
+  try {
+    const response = await fetch('http://localhost:8080/api/ml/camp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // If your gateway requires authentication token:
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+
+      },
+      // Wrap formData inside "data" object
+      body: JSON.stringify({ data: formData })
+    });
+
+    // Parse JSON
+    const result = await response.json();
+
+    console.log("🔍 API Gateway Response:", result);
+
+    if (!response.ok) {
+      throw new Error(result.error || 'API Error');
+    }
+
+    setApiResponse({ success: true, data: result.prediction || result });
+  } catch (err) {
+    setApiResponse({ success: false, message: err.message });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   return (
     <div className="prediction-form-wrapper">
@@ -271,26 +289,31 @@ const BloodCampForm = () => {
         </fieldset>
 
         <div className="form-submit-area">
-          <button type="submit" className="submit-btn" disabled={isSubmitting}>
+          <button type="submit" className="submit-btn" onClick={() => console.log("Button clicked")} disabled={isSubmitting}>
             {isSubmitting ? 'Submitting...' : <><FaUpload /> Run Prediction</>}
           </button>
         </div>
 
         {apiResponse && (
-          <div className={`api-response ${apiResponse.success ? 'success' : 'error'}`}>
-            {apiResponse.success ? (
-              <>
-                <FaCheckCircle />
-                <strong>Success!</strong> Predicted Camp Donations: {JSON.stringify(apiResponse.data.predicted_donations)} units.
-              </>
-            ) : (
-              <>
-                <FaExclamationCircle />
-                <strong>Error:</strong> {apiResponse.message}
-              </>
-            )}
-          </div>
-        )}
+  <div className={`api-response ${apiResponse.success ? 'success' : 'error'}`}>
+    {apiResponse.success ? (
+      <>
+        <FaCheckCircle />
+        <strong>Success!</strong> Predicted Collection:{" "}
+        {apiResponse.data?.predicted_collection ??
+         apiResponse.data?.predicted_donations ??
+         apiResponse.data?.prediction ??
+         "N/A"} units.
+      </>
+    ) : (
+      <>
+        <FaExclamationCircle />
+        <strong>Error:</strong> {apiResponse.message}
+      </>
+    )}
+  </div>
+)}
+
       </form>
     </div>
   );

@@ -9,7 +9,7 @@ import logo from "../../assets/images/logo-black.png";
 // API call helper
 const loginUser = async (credentials) => {
     try {
-        const response = await fetch("https://predict4-life-gateway-service.vercel.app/api/auth/login", {
+        const response = await fetch("http://localhost:8080/api/auth/login", {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",

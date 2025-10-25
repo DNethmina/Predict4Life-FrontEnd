@@ -116,9 +116,13 @@ const PredictionForm = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('http://localhost:8000/predict/gradientboosting_blood_collection', {
+      const response = await fetch('http://localhost:8080/api/ml/collection', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          // If your gateway requires authentication token:
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
         // Send data in the exact format your API expects
         body: JSON.stringify({ data: formData }) 
       });
