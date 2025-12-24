@@ -1,0 +1,172 @@
+.prediction-form-wrapper {
+  padding: 100px 30px 30px; /* 100px top padding to clear the navbar */
+  background-color: var(--bg-secondary);
+  min-height: 100vh;
+}
+
+.prediction-form {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.prediction-form h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.form-description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+/* --- Fieldset Grouping --- */
+fieldset {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+legend {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-red);
+  padding: 0 10px;
+  margin-left: 10px;
+}
+
+/* --- Responsive Grids --- */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+.form-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+/* --- Form Group --- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+/* --- Inputs & Selects (consistent with your Contact page) --- */
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(217, 4, 41, 0.15);
+}
+
+/* --- Validation Styles --- */
+.error-message {
+  color: var(--primary-red);
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.form-group input.is-invalid,
+.form-group select.is-invalid {
+  border-color: var(--primary-red);
+}
+
+/* --- Submit Area --- */
+.form-submit-area {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+.submit-btn {
+  width: auto;
+  padding: 12px 25px;
+  background-color: var(--primary-red);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.submit-btn:hover {
+  background-color: #b01c25;
+  transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- API Response Box --- */
+.api-response {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.api-response.success {
+  background-color: #e6f7ec;
+  color: #0d6437;
+  border: 1px solid #b7e4c7;
+}
+
+.api-response.error {
+  background-color: #fde8e8;
+  color: #a82020;
+  border: 1px solid #f5c0c0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .prediction-form-wrapper {
+    padding: 80px 15px 15px;
+  }
+  fieldset {
+    padding: 1.5rem 1rem;
+  }
+}

@@ -1,0 +1,164 @@
+/* --- Global Font --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* --- Page Background --- */
+.login-page-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #fef2f2;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* --- Main Login Card --- */
+.login-form-wrapper {
+    width: 100%;
+    max-width: 450px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(150, 20, 20, 0.1);
+    border: 1px solid #fee2e2;
+}
+
+.login-form-section {
+    padding: 40px;
+}
+
+/* --- UPDATED: Logo Styles --- */
+.welcome-text {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.login-logo {
+    width: 100%;
+    max-width: 250px; /* Controls the maximum size of the logo */
+    height: auto;
+    margin: 0 auto 15px; /* Centers the logo and adds some space below */
+}
+/* --- End of Updated Styles --- */
+
+
+/* --- Input Fields --- */
+.input-group {
+    margin-bottom: 24px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #374151;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+    background-color: #f9fafb;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    background-color: #fff;
+}
+
+/* --- Links & Options --- */
+.login-options {
+    text-align: right;
+    margin-bottom: 24px;
+}
+
+.forgot-password-link, .signup-link {
+    color: #ef4444;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.forgot-password-link:hover, .signup-link:hover {
+    color: #b91c1c;
+    text-decoration: underline;
+}
+
+/* --- Primary Button --- */
+.login-button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(to right, #ef4444, #dc2626);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+}
+
+/* --- Bottom Signup Text --- */
+.signup-text {
+    text-align: center;
+    margin-top: 32px;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.signup-text .signup-link {
+    color: #ef4444;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 5px;
+    transition: all 0.3s ease;
+}
+
+.signup-text .signup-link:hover {
+    color: #b91c1c;
+    text-decoration: underline;
+}
+
+.error-message {
+    color: #991b1b;
+    background-color: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.success-message {
+    color: #047857;
+    background-color: #ecfdf5;
+    border: 1px solid #6ee7b7;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Disabled button state */
+.login-button:disabled {
+    background: linear-gradient(to right, #f1a5a5, #e98b8b);
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.7;
+}

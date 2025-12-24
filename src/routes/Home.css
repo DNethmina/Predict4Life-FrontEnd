@@ -1,0 +1,184 @@
+/* --- Global Button Styles --- */
+.btn {
+  padding: 12px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+  border: 2px solid transparent;
+}
+
+.btn--primary {
+  background-color: var(--accent-color);
+  color: var(--button-text);
+}
+
+.btn--primary:hover {
+  background-color: var(--accent-hover);
+}
+
+.btn--outline {
+  background-color: transparent;
+  color: var(--text-primary);
+  border-color: var(--accent-color);
+}
+
+.btn--outline:hover {
+  background-color: var(--accent-color);
+  color: var(--button-text);
+}
+
+/* --- Hero Section --- */
+.hero {
+  background-color: var(--bg-primary);
+  padding: 100px 24px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.hero-container {
+  max-width: 750px;
+}
+
+.hero-headline {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.hero-subheadline {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.hero-btns {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* --- Features & How-It-Works Sections --- */
+.features-section, .how-it-works-section {
+  padding: 80px 24px;
+  background-color: var(--bg-secondary);
+}
+.how-it-works-section {
+  background-color: var(--card-bg);
+}
+
+.features-section h2, .how-it-works-section h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 50px;
+  color: var(--accent-color);
+  text-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.info-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.how-it-works-section .info-card {
+  background-color: var(--bg-secondary);
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px var(--shadow-color);
+  border-color: var(--accent-color);
+}
+
+.info-icon {
+  font-size: 3rem;
+  color: var(--primary-red);
+  margin-bottom: 25px;
+}
+
+.info-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 15px;
+}
+
+.info-card p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* --- CTA Section --- */
+.cta-section {
+  padding: 100px 24px;
+  background-color: var(--primary-red);
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.cta-section p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 30px;
+}
+
+.btn--cta {
+  background-color: #ffffff;
+  color: var(--primary-red);
+  font-size: 1.1rem;
+  padding: 14px 32px;
+}
+
+.btn--cta:hover {
+  background-color: #f0f0f0;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .nav-menu {
+    display: none; /* Simplification for now, would need a hamburger menu */
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-headline {
+    font-size: 2.5rem;
+  }
+  .hero-btns {
+    flex-direction: column;
+  }
+}
